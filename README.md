@@ -1,7 +1,8 @@
 # my-Arch-linux
 
 in this repo i will post my journey with Arch linux from private documentation i made so far
-
+my intentions are to make installation guide that would have no issue guarranteed further more in close future i will be going to make script like a Archinstall but with my touch
+Hope you will find my documentation helpful!
 the documentation goes as follows:
 
 ---
