@@ -8,26 +8,26 @@ the documentation goes as follows:
     ESP: mkfs.fat -F32 /dev/sda1
     Root: mkfs.ext4 /dev/sda2
     Swap: mkswap /dev/sda3
-;
+
 4- Mount the File Systems:
 
     Create ESP mount point: mkdir -p /mnt/boot/efi
     Mount ESP: mount /dev/sda1 /mnt/boot
     Mount root: mount /dev/sda2 /mnt
     Enable swap: swapon /dev/sda3
-;
+
 5- install:
     pacstrap -K /mnt base linux linux-firmware
-;
+
 6- Generate fstab:
     genfstab -U /mnt >> /mnt/etc/fstab
-;
+
 7- Chroot into the new system:
     arch-chroot /mnt
-;
+
 8- Time Zone (IN CHROOT):
     ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
-;
+
 9- locale stuff (IN CHROOT):
     echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
@@ -35,23 +35,23 @@ the documentation goes as follows:
     sed -i '/pl_PL.UTF-8/s/^#//g' /etc/locale.gen
 
     locale-gen
-;
+
 10- hostname (IN CHROOT): echo "archlinuxname" >> /etc/hostname
-;
+
 11- (optional?) hosts (IN CHROOT): #you can add your rotuer there
     echo "192.168.0.1    router" >> /etc/hosts
             /\ rotuer ip
-;
+
 'script': (its very not recomended to use that script)
 gateway_ip=$(ip route show default | awk '/default/ {print $3}')
 echo "$gateway_ip    router" >> /mnt/etc/hosts
-;
+
 12- use passwd for root (IN CHROOT) #so there wouldnt be any confusion
 passwd
-;
+
 13- boot stuff (IN CHROOT)
 bootctl install
-;
+
 14 PATH A: Using systemd-boot- install nano and create a boot entry file in /boot/loader/entries/arch.conf (IN CHROOT)
 pacman -S nano
 
@@ -69,20 +69,20 @@ title   Arch Linux
 linux   /vmlinuz-linux
 initrd  /initramfs-linux.img
 options root=PARTUUID=1811f51e-da89-49dc-b6d9-6959ae01c391 rw
-;
+
 14 PATH B: Using GRUB- Install the GRUB packages and other stuff: #its more recomended if you dont care about the speed of booting up
 pacman -S grub efibootmgr
 mkinitcpio -P
 (on efi): grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
-;
+
 15- Reboot
 Exit the chroot: exit
 
 Unmount: umount -R /mnt
 
 Reboot: reboot
-;
+
 
 (its advaiced to create Sudo user instead of abusing root that often)
 
@@ -107,7 +107,7 @@ sudo ip route add default via 192.168.0.1 dev enp0s25 #ip route show
     echo "nameserver 8.8.4.4" >> /etc/resolv.conf
     echo "nameserver 1.1.1.1" >> /etc/resolv.conf
     echo "nameserver 1.0.0.1" >> /etc/resolv.conf
-;
+
 OR (recomended) put your router/gateway there echo "nameserver 192.168.0.1" >> /etc/resolv.conf
 
 GET DHCP, FIREWALL WIRELESS CONNETIONS:
@@ -122,7 +122,7 @@ nano /etc/ufw/sysctl.conf
 net/ipv4/ip_forward=1
 net/ipv6/conf/default/forwarding=1
 net/ipv6/conf/all/forwarding=1
-;
+
 #FOR SHARING STUFF FOR EXAMPLE INTERNET TO YOUR PHONE, IF YOU DO THUS YOU MUST PREPARE beofre.rules file (not must have)
 nano /etc/ufw/before.rules
 
